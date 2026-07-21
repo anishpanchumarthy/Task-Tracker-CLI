@@ -29,6 +29,7 @@ def show_help():
     print('\n')
     print("exit                                  - Close the application\n")
 
+
 def get_time():
     """Returns the current time as a string"""
     return datetime.now().strftime("%Y-%m-%d %I:%M:%p")
