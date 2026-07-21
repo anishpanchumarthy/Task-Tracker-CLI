@@ -6,19 +6,27 @@ from pathlib import Path
 
 # initializes the id counter which will be return by the true id in create_file()
 id_counter = 0
-file = Path("/Users/anishpanchumarthy/Desktop/tasks/tasks.json")
+file = Path("/Users/anishpanchumarthy/Projects/Github/Task-Tracker-CLI/tasks/tasks.json")
 
 def show_help():
     """Prints available commands to User """
     print("\nAvailable commands:")
     print("add [task text]                       - Add whatever text that follows 'add' as a task that has status todo")
+    print('\n')
     print("describe [task id] [description]      - Add a description to a task with id #")
+    print('\n')
     print("mark [task id] [status]               - Add new status to a task with id #")
+    print('\n')
     print("update [task id] [task text]          - Update a task with id #")
+    print('\n')
     print("list [status(optional)]               - Lists all tasks or lists task in status category if specified")
+    print('\n')
     print('delete [task id]                      - Delete a task with id # and moves up the rest of the tasks')
+    print('\n')
     print('reset                                 - resets the entire task tracker')
+    print('\n')
     print("help                                  - Show this guide")
+    print('\n')
     print("exit                                  - Close the application\n")
 
 def get_time():
