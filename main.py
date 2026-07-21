@@ -2,6 +2,11 @@ import sys
 import json
 from datetime import datetime
 from pathlib import Path
+# todo: make a description function
+# todo: make a status changer
+# todo: make a listing feature
+# todo: make a deleting featyre
+
 
 # initializes the id counter which will be return by the true id in create_file()
 id_counter = 0
@@ -31,24 +36,36 @@ def get_last_id():
     """Returns the last id of the last task added to the Json file"""
     global file
     with open(file, 'r') as f:
-        prog_dict = json.load(f)
-        id_dict = prog_dict.get('prog')
+        json_dict = json.load(f)
+        id_dict = json_dict.get('prog')
         id_counter = id_dict.get('id_counter')
         return id_counter
 
 
 def add(task):
-    """creates a task with the input as the string, gives it a id #, a createdat time, and the status to do"""
+    """creates a task with the input as the string, gives it a id #, a createdat time, and the status to do
+    the id # can be found as the key for the key:pair that has the dictionary with the rest of the elements"""
     global file
     id= get_last_id()
     id += 1
-    task_dict = {'id': id}
+    print(id)
+    #this block of code rewrites the id_counter in the file
+    with open(file, 'r') as f:
+        json_dict = json.load(f)
+    #     id_dict = prog_dict.get('prog')
+    #     id_dict.update({'id_counter', id})
+    #this block of code creates the task and its info
+    task_dict = {}
     task_dict.update({'task': task})
     task_dict.update({'createdat': get_time()})
     task_dict.update({'status': 'todo'})
     task_str = str(task_dict)
-    with open(file, 'a') as f:
-        json.dump(task_str, f)
+    json_dict.update({1: task_str})
+    new_id = {"id_counter": id}
+    json_dict.update({'prog': new_id})
+    with open(file, 'w') as f:
+        json.dump(json_dict, f)
+
 
 def main():
     while True:
@@ -68,7 +85,7 @@ def main():
             elif command == 'help':
                 show_help()
             elif command == 'add':
-                add(parts)
+                add(arg)
             else:
                 print(f'Unknown command: {command}')
 
