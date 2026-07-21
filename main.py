@@ -2,7 +2,6 @@ import sys
 import json
 from datetime import datetime
 from pathlib import Path
-# todo: make a description function
 # todo: make a status changer
 # todo: make a listing feature
 # todo: make a deleting featyre
@@ -14,10 +13,11 @@ file = Path("/Users/anishpanchumarthy/Desktop/tasks/tasks.json")
 
 def show_help():
     """Prints available commands to User """
-    print('\n Available commands:')
-    print('add             - adds whatever text that follows as a task that has status todo')
-    print('help            - Show this guide')
-    print('exit            - Close the application\n')
+    print('\nAvailable commands:')
+    print('add [task text]                       - Add whatever text that follows "add" as a task that has status todo')
+    print('describe [task id] [description]      - Add a description to a task with id #')
+    print('help                                  - Show this guide')
+    print('exit                                  - Close the application\n')
 
 def get_time():
     """Returns the current time as a string"""
@@ -48,7 +48,6 @@ def add(task):
     global file
     id= get_last_id()
     id += 1
-    print(id)
     #this block of code rewrites the id_counter in the file
     with open(file, 'r') as f:
         json_dict = json.load(f)
@@ -59,13 +58,30 @@ def add(task):
     task_dict.update({'task': task})
     task_dict.update({'createdat': get_time()})
     task_dict.update({'status': 'todo'})
-    task_str = str(task_dict)
-    json_dict.update({1: task_str})
+    json_dict.update({id: task_dict})
     new_id = {"id_counter": id}
     json_dict.update({'prog': new_id})
     with open(file, 'w') as f:
         json.dump(json_dict, f)
 
+def describe(task_id,description):
+    """Takes in two inputs: task_id an integer and description string that adds a description to a task, it will replace a description if one already exists"""
+    global file
+    #this block of code adds a description key:pair
+    descrip_dict = {'descrip': description}
+    #opens file and takes out the tasks dictionary
+    with open(file, 'r') as f:
+        json_dict = json.load(f)
+    #checks to see if task id is valid
+    if task_id not in json_dict.keys():
+        print(f'There is not task with id # {task_id}')
+    else:
+        task_dict = json_dict.get((task_id))
+        #updates the task dict with the new description
+        task_dict.update(descrip_dict)
+        json_dict.update({task_id: task_dict})
+        with open(file, 'w') as f:
+            json.dump(json_dict, f)
 
 def main():
     while True:
@@ -85,10 +101,13 @@ def main():
             elif command == 'help':
                 show_help()
             elif command == 'add':
-                add(arg)
+                combined_arg = ' '.join(arg)
+                add(combined_arg)
+            elif command == 'describe':
+                combined_arg = ' '.join(arg[1:])
+                describe(arg[0], combined_arg)
             else:
                 print(f'Unknown command: {command}')
-
 
 
         except (KeyboardInterrupt, EOFError):
