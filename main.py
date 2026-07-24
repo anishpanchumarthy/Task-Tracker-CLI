@@ -21,7 +21,7 @@ def show_help():
     print('\n')
     print("list [status(optional)]               - Lists all tasks or lists task in status category if specified")
     print('\n')
-    print('delete [task id]                      - Delete a task with id # and moves up the rest of the tasks')
+    print("delete [task id]                      - Delete a task or tasks with id #'s and moves up the rest of the tasks")
     print('\n')
     print('reset                                 - resets the entire task tracker')
     print('\n')
@@ -275,7 +275,12 @@ def main():
                     print(combined_arg)
                     list()
             elif command == "delete":
-                delete(arg[0])
+                if len(arg) != 1:
+                    arg = sorted(arg, key=int, reverse=True)
+                    for x in arg:
+                        delete(x)
+                else:
+                    delete(arg[0])
             elif command == "reset":
                 reset()
             else:
